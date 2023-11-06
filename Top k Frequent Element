@@ -1,0 +1,64 @@
+//{ Driver Code Starts
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br =
+            new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while (T-- > 0) {
+            String[] s = br.readLine().trim().split(" ");
+            int n = Integer.parseInt(s[0]);
+            int[] nums = new int[n];
+            for (int i = 0; i < n; i++) {
+                nums[i] = Integer.parseInt(s[i + 1]);
+            }
+            int k = Integer.parseInt(br.readLine().trim());
+            Solution obj = new Solution();
+            int[] ans = obj.topK(nums, k);
+            for (int i = 0; i < ans.length; i++) System.out.print(ans[i] + " ");
+            System.out.println();
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+class Solution {
+    public int[] topK(int[] nums, int k) {
+        // Code here
+        Map<Integer,Integer> hm = new HashMap<>();
+        
+        for(int e:nums)
+        {
+            hm.put(e,hm.getOrDefault(e,0)+1);
+        }
+        
+        PriorityQueue<Map.Entry<Integer,Integer>> pq = new PriorityQueue<>(
+        (a,b)->{
+            if(!a.getValue().equals(b.getValue())) return a.getValue()-b.getValue(); // freq in asc
+            else return a.getKey()-b.getKey();///freq is same ,sort the  key in asc
+            
+        }
+        );
+        
+        for(Map.Entry<Integer,Integer> entry : hm.entrySet())
+        {
+            pq.add(entry);
+            if(pq.size()>k)pq.remove();
+        }
+        int res[]= new int [k];
+        
+        int i=k-1;
+        while(!pq.isEmpty())
+        {
+            res[i--]=pq.poll().getKey();
+            
+        }
+        return res;
+        
+        
+    }
+}
